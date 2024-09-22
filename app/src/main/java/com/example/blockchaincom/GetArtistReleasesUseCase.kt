@@ -2,9 +2,10 @@ package com.example.blockchaincom
 
 import javax.inject.Inject
 
-class GetArtistReleasesUseCase @Inject constructor(private val repository: DiscogsRepository) {
+class GetArtistReleasesUseCase @Inject constructor(private val repository: ReleaseRepository) {
 
-    suspend operator fun invoke(artistId: Int): List<Release> {
-        return repository.fetchArtistReleases(artistId).releases
+    suspend operator fun invoke(artistId: Int): ReleaseResult {
+        return repository.getArtistReleases(artistId)
     }
 }
+

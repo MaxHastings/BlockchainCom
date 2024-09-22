@@ -1,6 +1,9 @@
 package com.example.blockchaincom
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -24,8 +27,9 @@ data class Urls(
     val next: String?
 )
 
+@Entity
 data class Release(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val title: String,
     val type: String,
     val main_release: Int?,
@@ -34,34 +38,39 @@ data class Release(
     val resource_url: String,
     val year: Int?,
     val thumb: String?,
-    val stats: Stats?,
     val status: String?,    // for releases that contain the 'status' field
     val format: String?,    // for releases that contain the 'format' field
     val label: String?      // for releases that contain the 'label' field
 )
 
-data class Stats(
-    val community: Community
-)
-
-data class Community(
-    val in_wantlist: Int,
-    val in_collection: Int
-)
-
-
-// Define the Retrofit interface for the Discogs API
 interface DiscogsApi {
     @GET("artists/{artist_id}/releases")
     suspend fun getArtistReleases(@Path("artist_id") artistId: Int): PaginationResponse
 }
 
-// Create the data layer class
-class DiscogsRepository @Inject constructor(private val discogsApi: DiscogsApi) {
+sealed class ReleaseResult {
+    data class Success(val releases: List<Release>, val message: String? = null) : ReleaseResult()
+    data class Error(val message: String) : ReleaseResult()
+}
 
-    suspend fun fetchArtistReleases(artistId: Int): PaginationResponse {
-        return withContext(Dispatchers.IO) {
-            discogsApi.getArtistReleases(artistId)
+class ReleaseRepository @Inject constructor(
+    private val discogsApi: DiscogsApi,
+    private val releaseDao: ReleaseDao,
+) {
+
+    suspend fun getArtistReleases(artistId: Int): ReleaseResult {
+        try {
+            val response = discogsApi.getArtistReleases(artistId)
+            releaseDao.insertReleases(response.releases)
+            return ReleaseResult.Success(response.releases)
+        } catch (e: Exception) {
+            val releases = releaseDao.getReleasesByArtistId(artistId).firstOrNull()
+            return if (releases != null) {
+                ReleaseResult.Success(releases, "Local data fetched")
+            } else {
+                ReleaseResult.Error(e.message ?: "No Artists Found")
+            }
         }
     }
 }
+
