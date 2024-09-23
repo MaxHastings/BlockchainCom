@@ -39,7 +39,7 @@ https://www.discogs.com/developers/
 * Hilt: For dependency injection.
 * Jetpack Compose: For UI development.
 * Room: For local database caching.
-* Mockio: For unit testing.
+* Mockito: For unit testing.
 
 ## Contributing
 
