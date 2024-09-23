@@ -8,7 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
-class ReleaseRepository @Inject constructor(
+class ReleaseRepositoryImpl @Inject constructor(
     private val releasesApi: ReleasesApi,
     private val releaseDao: ReleaseDao,
     private val releaseMapper: ReleaseMapper,
