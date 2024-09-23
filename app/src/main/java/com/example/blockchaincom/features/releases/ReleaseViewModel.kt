@@ -6,6 +6,7 @@ import com.example.blockchaincom.domain.usecases.GetArtistReleasesUseCase
 import com.example.blockchaincom.data.local.releases.Release
 import com.example.blockchaincom.features.releases.data.ReleaseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -22,7 +23,10 @@ sealed class ReleaseUiState(open val releases: List<Release> = emptyList()) {
 }
 
 @HiltViewModel
-class ReleaseViewModel @Inject constructor(private val getArtistReleasesUseCase: GetArtistReleasesUseCase) :
+class ReleaseViewModel @Inject constructor(
+    private val getArtistReleasesUseCase: GetArtistReleasesUseCase,
+    private val dispatcher: CoroutineDispatcher
+) :
     ViewModel() {
 
     private val _uiState = MutableStateFlow<ReleaseUiState>(ReleaseUiState.Loading)
@@ -32,7 +36,7 @@ class ReleaseViewModel @Inject constructor(private val getArtistReleasesUseCase:
     val errorEvents: SharedFlow<String> = _errorEvents.asSharedFlow()
 
     fun getArtistReleases(artistId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             when (val result = getArtistReleasesUseCase(artistId)) {
                 is ReleaseResult.Success -> {
                     _uiState.value = ReleaseUiState.Success(result.releases)
