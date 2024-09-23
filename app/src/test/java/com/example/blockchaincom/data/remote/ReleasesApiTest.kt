@@ -1,7 +1,6 @@
 package com.example.blockchaincom.data.remote
 
 import com.example.blockchaincom.data.remote.releases.ReleasesApi
-import com.example.blockchaincom.data.remote.releases.ReleasesApiImpl
 import com.google.gson.Gson
 import io.kotest.assertions.throwables.shouldThrow
 import io.mockk.coEvery
@@ -20,7 +19,7 @@ import org.junit.Test
 import java.io.IOException
 
 @ExperimentalCoroutinesApi
-class ReleasesApiImplTest {
+class ReleasesApiTest {
 
     private lateinit var releasesApi: ReleasesApi
     private lateinit var httpClient: OkHttpClient
@@ -30,7 +29,7 @@ class ReleasesApiImplTest {
     fun setup() {
         httpClient = mockk()
         gson = Gson()
-        releasesApi = ReleasesApiImpl(httpClient, gson)
+        releasesApi = ReleasesApi(httpClient, gson)
     }
 
     @Test

@@ -8,7 +8,6 @@ import com.example.blockchaincom.data.remote.releases.Pagination
 import com.example.blockchaincom.data.remote.releases.PaginationResponse
 import com.example.blockchaincom.data.remote.releases.ReleaseApiModel
 import com.example.blockchaincom.data.remote.releases.ReleasesApi
-import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -21,9 +20,9 @@ import org.junit.Before
 import org.junit.Test
 import java.io.IOException
 
-class ReleaseRepositoryImplTest {
+class ReleaseRepositoryTest {
 
-    private lateinit var releaseRepository: ReleaseRepositoryImpl
+    private lateinit var releaseRepository: ReleaseRepository
     private lateinit var releasesApi: ReleasesApi
     private lateinit var releasesDao: ReleaseDao
     private lateinit var releasesMapper: ReleaseMapper
@@ -37,7 +36,7 @@ class ReleaseRepositoryImplTest {
         context = mockk()
 
         releaseRepository =
-            ReleaseRepositoryImpl(
+            ReleaseRepository(
                 releaseDao = releasesDao,
                 releasesApi = releasesApi,
                 releaseMapper = releasesMapper,

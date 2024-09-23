@@ -1,9 +1,9 @@
 package com.example.blockchaincom.features.releases.data
 
 import android.content.Context
-import com.example.blockchaincom.data.remote.releases.ReleasesApi
 import com.example.blockchaincom.R
 import com.example.blockchaincom.data.local.releases.ReleaseDao
+import com.example.blockchaincom.data.remote.releases.ReleasesApi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
@@ -19,7 +19,7 @@ import javax.inject.Inject
  * @property context Application context for retrieving resources (like error messages).
  *
  */
-class ReleaseRepositoryImpl @Inject constructor(
+class ReleaseRepository @Inject constructor(
     private val releasesApi: ReleasesApi,
     private val releaseDao: ReleaseDao,
     private val releaseMapper: ReleaseMapper,
