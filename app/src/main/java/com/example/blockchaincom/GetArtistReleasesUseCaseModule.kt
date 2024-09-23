@@ -26,14 +26,3 @@ object GetArtistReleasesUseCaseModule {
     }
 
 }
-
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class AnalyticsModule {
-
-    @Binds
-    abstract fun bindDiscogsApi(
-        discogsApiImpl: DiscogsApiImpl
-    ): DiscogsApi
-
-}

@@ -11,13 +11,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-//
-//    @Provides
-//    @Singleton
-//    fun provideDiscogsApi(retrofit: Retrofit): DiscogsApi {
-//        return retrofit.create(DiscogsApi::class.java)
-//    }
-
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit {

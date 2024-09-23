@@ -1,7 +1,5 @@
 package com.example.blockchaincom
 
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -36,13 +34,4 @@ fun ReleaseListScreen(viewModel: ReleaseViewModel = hiltViewModel()) {
         is ReleaseUiState.Success -> {}
     }
     ReleaseList(releases = uiState.releases)
-}
-
-@Composable
-fun ReleaseList(releases: List<ReleaseModel>) {
-    LazyColumn {
-        items(releases) { release ->
-            ReleaseItem(release)
-        }
-    }
 }
