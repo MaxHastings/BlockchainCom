@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class ReleaseUiState(open val releases: List<ReleaseModel> = emptyList()) {
-    object Loading : ReleaseUiState()
-    data class ListState(override val releases: List<ReleaseModel>) : ReleaseUiState(releases)
+    data object Loading : ReleaseUiState()
+    data class Success(override val releases: List<ReleaseModel>) : ReleaseUiState(releases)
     data class Error(override val releases: List<ReleaseModel>, val message: String) : ReleaseUiState()
 }
 
@@ -32,7 +32,7 @@ class ReleaseViewModel @Inject constructor(private val getArtistReleasesUseCase:
         viewModelScope.launch {
             when (val result = getArtistReleasesUseCase(artistId)) {
                 is ReleaseResult.Success -> {
-                    _uiState.value = ReleaseUiState.ListState(result.releases)
+                    _uiState.value = ReleaseUiState.Success(result.releases)
                 }
                 is ReleaseResult.Error -> {
                     _errorEvents.emit(result.message)
@@ -43,7 +43,7 @@ class ReleaseViewModel @Inject constructor(private val getArtistReleasesUseCase:
     }
 
     fun clearError() {
-        _uiState.value = ReleaseUiState.ListState(uiState.value.releases)
+        _uiState.value = ReleaseUiState.Success(uiState.value.releases)
     }
 
 }

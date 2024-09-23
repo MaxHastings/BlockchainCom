@@ -33,7 +33,7 @@ fun ReleaseListScreen(viewModel: ReleaseViewModel = hiltViewModel()) {
                 }
             )
         }
-        is ReleaseUiState.ListState -> {}
+        is ReleaseUiState.Success -> {}
     }
     ReleaseList(releases = uiState.releases)
 }
