@@ -6,6 +6,7 @@ import com.example.blockchaincom.features.releases.data.ReleaseResult
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
@@ -15,12 +16,13 @@ class ReleaseViewModelTest {
 
     private lateinit var viewModel: ReleaseViewModel
     private lateinit var getArtistReleasesUseCase: GetArtistReleasesUseCase
-    private val testDispatcher = UnconfinedTestDispatcher() // Add a test dispatcher
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setup() {
         getArtistReleasesUseCase = mockk()
-        viewModel = ReleaseViewModel(getArtistReleasesUseCase, testDispatcher) // Pass dispatcher to ViewModel
+        viewModel = ReleaseViewModel(getArtistReleasesUseCase, testDispatcher)
     }
 
     @Test

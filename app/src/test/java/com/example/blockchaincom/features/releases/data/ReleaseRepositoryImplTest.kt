@@ -147,6 +147,7 @@ class ReleaseRepositoryImplTest {
 
         val result = releaseRepository.getArtistReleases(artistId)
 
+        // Assert that result is an error
         Assert.assertTrue(result is ReleaseResult.Error)
     }
 }
