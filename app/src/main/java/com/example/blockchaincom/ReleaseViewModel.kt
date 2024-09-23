@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class ReleaseUiState(
-    val releases: List<Release> = emptyList(),
+    val releases: List<ReleaseModel> = emptyList(),
     val showError: Boolean = false,
     val errorMessage: String? = null
 )

@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ReleaseItem(release: Release) {
+fun ReleaseItem(release: ReleaseModel) {
     Column(modifier = Modifier.padding(16.dp)) {
         Text(text = release.title, style = MaterialTheme.typography.headlineMedium)
         Text(text = release.year.toString(), style = MaterialTheme.typography.bodyMedium)

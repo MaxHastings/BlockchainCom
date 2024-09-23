@@ -31,7 +31,7 @@ fun ReleaseListScreen(viewModel: ReleaseViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun ReleaseList(releases: List<Release>) {
+fun ReleaseList(releases: List<ReleaseModel>) {
     LazyColumn {
         items(releases) { release ->
             ReleaseItem(release)

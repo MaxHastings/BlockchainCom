@@ -2,16 +2,14 @@ package com.example.blockchaincom
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.withContext
 import retrofit2.http.GET
 import retrofit2.http.Path
 import javax.inject.Inject
 
 data class PaginationResponse(
     val pagination: Pagination,
-    val releases: List<Release>
+    val releases: List<ReleaseApiModel>
 )
 
 data class Pagination(
@@ -27,9 +25,8 @@ data class Urls(
     val next: String?
 )
 
-@Entity
-data class Release(
-    @PrimaryKey val id: Int,
+data class ReleaseApiModel(
+    val id: Int,
     val title: String,
     val type: String,
     val main_release: Int?,
@@ -43,26 +40,70 @@ data class Release(
     val label: String?      // for releases that contain the 'label' field
 )
 
+@Entity
+data class ReleaseModel(
+    @PrimaryKey val id: Int,
+    val artistId: Int,
+    val title: String,
+    val type: String,
+    val main_release: Int?,
+    val artist: String,
+    val role: String,
+    val resource_url: String,
+    val year: Int?,
+    val thumb: String?,
+    val status: String?,    // for releases that contain the 'status' field
+    val format: String?,    // for releases that contain the 'format' field
+    val label: String?      // for releases that contain the 'label' field
+)
+
+class ReleaseMapper @Inject constructor() {
+    fun mapApiModelsToModels(apiModels: List<ReleaseApiModel>, artistId: Int): List<ReleaseModel> {
+        return apiModels.map { apiModel ->
+            ReleaseModel(
+                id = apiModel.id,
+                artistId = artistId,
+                title = apiModel.title,
+                type = apiModel.type,
+                main_release = apiModel.main_release,
+                artist = apiModel.artist,
+                role = apiModel.role,
+                resource_url = apiModel.resource_url,
+                year = apiModel.year,
+                thumb = apiModel.thumb,
+                status = apiModel.status,
+                format = apiModel.format,
+                label = apiModel.label
+            )
+        }
+    }
+}
+
 interface DiscogsApi {
     @GET("artists/{artist_id}/releases")
     suspend fun getArtistReleases(@Path("artist_id") artistId: Int): PaginationResponse
 }
 
 sealed class ReleaseResult {
-    data class Success(val releases: List<Release>, val message: String? = null) : ReleaseResult()
+    data class Success(val releases: List<ReleaseModel>, val message: String? = null) : ReleaseResult()
     data class Error(val message: String) : ReleaseResult()
 }
 
 class ReleaseRepository @Inject constructor(
     private val discogsApi: DiscogsApi,
     private val releaseDao: ReleaseDao,
+    private val releaseMapper: ReleaseMapper
 ) {
 
     suspend fun getArtistReleases(artistId: Int): ReleaseResult {
         try {
             val response = discogsApi.getArtistReleases(artistId)
-            releaseDao.insertReleases(response.releases)
-            return ReleaseResult.Success(response.releases)
+            val releases = releaseMapper.mapApiModelsToModels(
+                artistId = artistId,
+                apiModels = response.releases
+            )
+            releaseDao.insertReleases(releases)
+            return ReleaseResult.Success(releases)
         } catch (e: Exception) {
             val releases = releaseDao.getReleasesByArtistId(artistId).firstOrNull()
             return if (releases != null) {
