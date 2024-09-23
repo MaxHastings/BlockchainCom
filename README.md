@@ -9,12 +9,12 @@ This Android app allows you to:
 
 ## Features
 
-* Modern user interface.
+* Modern user interface using Jetpack Compose.
+* Modern architecture (data, ui and domain layers)
 * Clean code.
 * Unit testing.
 * Data fetching and local database caching.
 * Error handling.
-* Modern Android development practices (Kotlin, Jetpack Compose, Coroutines, Hilt, etc.).
 
 ## Screenshots
 
