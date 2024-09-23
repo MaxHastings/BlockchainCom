@@ -57,10 +57,10 @@ class ReleaseRepositoryImplTest {
                 status = "Accepted",
                 format = "Album",
                 type = "release",
-                main_release = null,
+                mainRelease = null,
                 artist = "Artist Name",
                 role = "Main",
-                resource_url = "https://api.discogs.com/releases/1",
+                resourceUrl = "https://api.discogs.com/releases/1",
                 thumb = "https://example.com/thumb1.jpg",
                 label = "Label A"
             ),
@@ -72,10 +72,10 @@ class ReleaseRepositoryImplTest {
                 status = "Accepted",
                 format = "Single",
                 type = "release",
-                main_release = null,
+                mainRelease = null,
                 artist = "Artist Name",
                 role = "Main",
-                resource_url = "https://api.discogs.com/releases/2",
+                resourceUrl = "https://api.discogs.com/releases/2",
                 thumb = "https://example.com/thumb2.jpg",
                 label = "Label B"
             )
@@ -85,7 +85,7 @@ class ReleaseRepositoryImplTest {
             pagination = Pagination(
                 page = 1,
                 pages = 1,
-                per_page = 50,
+                perPage = 50,
                 items = 2,
                 urls = Urls(
                     last = "https://api.discogs.com/artists/$artistId/releases?page=1&per_page=50",
@@ -100,10 +100,10 @@ class ReleaseRepositoryImplTest {
                     status = "Accepted",
                     format = "Album",
                     type = "release",
-                    main_release = null,
+                    mainRelease = null,
                     artist = "Artist Name",
                     role = "Main",
-                    resource_url = "https://api.discogs.com/releases/1",
+                    resourceUrl = "https://api.discogs.com/releases/1",
                     thumb = "https://example.com/thumb1.jpg",
                     label = "Label A"
                 ),
@@ -114,10 +114,10 @@ class ReleaseRepositoryImplTest {
                     status = "Accepted",
                     format = "Single",
                     type = "release",
-                    main_release = null,
+                    mainRelease = null,
                     artist = "Artist Name",
                     role = "Main",
-                    resource_url = "https://api.discogs.com/releases/2",
+                    resourceUrl = "https://api.discogs.com/releases/2",
                     thumb = "https://example.com/thumb2.jpg",
                     label = "Label B"
                 )

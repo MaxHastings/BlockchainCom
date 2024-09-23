@@ -29,8 +29,8 @@ class ReleaseViewModelTest {
         val releases = listOf(
             Release(
                 id = 1, artistId = artistId, title = "Release 1", year = 2022,
-                status = "Accepted", format = "Album", type = "release", main_release = null,
-                artist = "Artist Name", role = "Main", resource_url = "release_url",
+                status = "Accepted", format = "Album", type = "release", mainRelease = null,
+                artist = "Artist Name", role = "Main", resourceUrl = "release_url",
                 thumb = "thumb_url", label = "Label"
             )
         )
