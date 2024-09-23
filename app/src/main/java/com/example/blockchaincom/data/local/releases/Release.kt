@@ -2,6 +2,7 @@ package com.example.blockchaincom.data.local.releases
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 @Entity
 data class Release(
@@ -9,13 +10,13 @@ data class Release(
     val artistId: Int,
     val title: String,
     val type: String,
-    val main_release: Int?,
+    @SerializedName("main_release") val mainRelease: Int?,
     val artist: String,
     val role: String,
-    val resource_url: String,
+    @SerializedName("resource_url") val resourceUrl: String,
     val year: Int?,
     val thumb: String?,
-    val status: String?,    // for releases that contain the 'status' field
-    val format: String?,    // for releases that contain the 'format' field
-    val label: String?      // for releases that contain the 'label' field
+    val status: String?,
+    val format: String?,
+    val label: String?
 )
