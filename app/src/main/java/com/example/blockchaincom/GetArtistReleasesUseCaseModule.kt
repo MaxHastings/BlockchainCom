@@ -1,7 +1,6 @@
 package com.example.blockchaincom
 
 import com.google.gson.Gson
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

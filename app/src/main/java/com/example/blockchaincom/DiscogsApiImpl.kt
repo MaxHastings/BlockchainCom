@@ -1,6 +1,5 @@
 package com.example.blockchaincom
 
-
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,7 +24,6 @@ class DiscogsApiImpl @Inject constructor(
                 val responseBody = response.body()?.string()
                 gson.fromJson(responseBody, PaginationResponse::class.java)
             } else {
-                // Handle error cases (e.g., throw an exception or return a default value)
                 throw IOException("Unexpected response code: ${response.code()}")
             }
         }
