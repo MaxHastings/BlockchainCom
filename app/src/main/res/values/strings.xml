@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">BlockchainCom</string>
+    <string name="error_fetching_releases">Failed fetching data</string>
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
+    <string name="view_releases">View Releases</string>
+    <string name="enter_artist_id">Enter Artist ID</string>
 </resources>

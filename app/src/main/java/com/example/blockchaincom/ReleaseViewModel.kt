@@ -32,11 +32,18 @@ class ReleaseViewModel @Inject constructor(private val getArtistReleasesUseCase:
         viewModelScope.launch {
             when (val result = getArtistReleasesUseCase(artistId)) {
                 is ReleaseResult.Success -> {
-                    _uiState.value = _uiState.value.copy(releases = result.releases)
+                    _uiState.value = _uiState.value.copy(
+                        releases = result.releases,
+                        showError = false,
+                    )
                 }
                 is ReleaseResult.Error -> {
-                    _errorEvents.emit("Error: ${result.message}")
-                    _uiState.value = _uiState.value.copy(showError = true, errorMessage = result.message)
+                    _errorEvents.emit(result.message)
+                    _uiState.value = _uiState.value.copy(
+                        showError = true,
+                        releases = result.releases,
+                        errorMessage = result.message
+                    )
                 }
             }
         }
