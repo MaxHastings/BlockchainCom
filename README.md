@@ -12,7 +12,7 @@ This Android app allows you to:
 * Modern user interface using Jetpack Compose.
 * Modern architecture (data, ui and domain layers)
 * Clean code.
-* Unit testing.
+* Thorough documentation and unit testing of important classes such as ViewModels, Repositories and API classes.
 * Data fetching and local database caching.
 * Error handling.
 
