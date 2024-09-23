@@ -12,17 +12,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class ReleaseUiState(
-    val releases: List<ReleaseModel> = emptyList(),
-    val showError: Boolean = false,
-    val errorMessage: String? = null
-)
+sealed class ReleaseUiState(open val releases: List<ReleaseModel> = emptyList()) {
+    object Loading : ReleaseUiState()
+    data class ListState(override val releases: List<ReleaseModel>) : ReleaseUiState(releases)
+    data class Error(override val releases: List<ReleaseModel>, val message: String) : ReleaseUiState()
+}
 
 @HiltViewModel
 class ReleaseViewModel @Inject constructor(private val getArtistReleasesUseCase: GetArtistReleasesUseCase) :
     ViewModel() {
 
-    private val _uiState = MutableStateFlow(ReleaseUiState())
+    private val _uiState = MutableStateFlow<ReleaseUiState>(ReleaseUiState.Loading)
     val uiState: StateFlow<ReleaseUiState> = _uiState.asStateFlow()
 
     private val _errorEvents = MutableSharedFlow<String>()
@@ -32,25 +32,18 @@ class ReleaseViewModel @Inject constructor(private val getArtistReleasesUseCase:
         viewModelScope.launch {
             when (val result = getArtistReleasesUseCase(artistId)) {
                 is ReleaseResult.Success -> {
-                    _uiState.value = _uiState.value.copy(
-                        releases = result.releases,
-                        showError = false,
-                    )
+                    _uiState.value = ReleaseUiState.ListState(result.releases)
                 }
                 is ReleaseResult.Error -> {
                     _errorEvents.emit(result.message)
-                    _uiState.value = _uiState.value.copy(
-                        showError = true,
-                        releases = result.releases,
-                        errorMessage = result.message
-                    )
+                    _uiState.value = ReleaseUiState.Error( result.releases, result.message)
                 }
             }
         }
     }
 
     fun clearError() {
-        _uiState.value = _uiState.value.copy(showError = false, errorMessage = null)
+        _uiState.value = ReleaseUiState.ListState(uiState.value.releases)
     }
 
 }
