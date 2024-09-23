@@ -9,11 +9,11 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AnalyticsModule {
+abstract class ReleasesApiModule {
 
     @Binds
-    abstract fun bindDiscogsApi(
-        discogsApiImpl: ReleasesApiImpl
+    abstract fun bindReleasesApi(
+        releasesApiImpl: ReleasesApiImpl
     ): ReleasesApi
 
 }
