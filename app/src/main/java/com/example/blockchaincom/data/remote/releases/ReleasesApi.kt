@@ -1,6 +1,7 @@
 package com.example.blockchaincom.data.remote.releases
 
 import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -17,7 +18,8 @@ import javax.inject.Inject
  */
 class ReleasesApi @Inject constructor(
     private val httpClient: OkHttpClient,
-    private val gson: Gson
+    private val gson: Gson,
+    private val dispatcher: CoroutineDispatcher
 ) {
 
     /**
@@ -32,7 +34,7 @@ class ReleasesApi @Inject constructor(
             .url("https://api.discogs.com/artists/$artistId/releases")
             .build()
 
-        return withContext(Dispatchers.IO) {
+        return withContext(dispatcher) {
             val response = httpClient.newCall(request).execute()
             if (response.isSuccessful) {
                 val responseBody = response.body()?.string()

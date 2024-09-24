@@ -7,6 +7,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
@@ -24,12 +25,13 @@ class ReleasesApiTest {
     private lateinit var releasesApi: ReleasesApi
     private lateinit var httpClient: OkHttpClient
     private lateinit var gson: Gson
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setup() {
         httpClient = mockk()
         gson = Gson()
-        releasesApi = ReleasesApi(httpClient, gson)
+        releasesApi = ReleasesApi(httpClient, gson, testDispatcher)
     }
 
     @Test
