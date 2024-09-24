@@ -1,8 +1,8 @@
 package com.example.blockchaincom.features.releases.data
 
 import android.content.Context
-import androidx.compose.ui.geometry.isEmpty
 import com.example.blockchaincom.data.Urls
+import com.example.blockchaincom.R
 import com.example.blockchaincom.data.local.releases.Release
 import com.example.blockchaincom.data.local.releases.ReleaseDao
 import com.example.blockchaincom.data.remote.ApiResult
@@ -139,18 +139,44 @@ class ReleaseRepositoryTest {
     }
 
     @Test
-    fun `getArtistReleases should return Error when exception is thrown`() = runBlocking {
-        val artistId = 123
-        val exception = IOException("Network error")
-
-        coEvery { releasesDao.getReleasesByArtistId(artistId) } returns flowOf(emptyList())
-        coEvery { releasesApi.getArtistReleases(artistId) } throws exception
+    fun `getArtistReleases returns Error with cached releases when exception is thrown`() = runTest {
+        // Mock the ReleasesApi to throw an exception
+        coEvery { releasesApi.getArtistReleases(any()) } throws IOException("Network error")
         coEvery { context.getString(any()) } returns "Error fetching releases"
 
+        val artistId = 123
+        // Mock the ReleaseDao to return some cached releases
+        val cachedReleases = listOf(
+            Release(
+                id = 1,
+                artistId = artistId,
+                title = "Release 1",
+                year = 2022,
+                status = "Accepted",
+                format = "Album",
+                type = "release",
+                mainRelease = null,
+                artist = "Artist Name",
+                role = "Main",
+                resourceUrl = "https://api.discogs.com/releases/1",
+                thumb = "https://example.com/thumb1.jpg",
+                label = "Label A"
+            )
+        )
+        coEvery { releasesDao.getReleasesByArtistId(any()) } returns flowOf(cachedReleases)
+
+        // Call the getArtistReleases function
         val result = releaseRepository.getArtistReleases(artistId)
 
         // Assert that the result is ReleaseResult.Error
         Assert.assertTrue(result is ReleaseResult.Error)
+
+        // Assert that the error message is correct
+        val expectedMessage = context.getString(R.string.error_fetching_releases)
+        Assert.assertEquals(expectedMessage, (result as ReleaseResult.Error).message)
+
+        // Assert that the list of releases is the cached releases
+        Assert.assertEquals(cachedReleases, result.releases)
     }
 
     @Test
