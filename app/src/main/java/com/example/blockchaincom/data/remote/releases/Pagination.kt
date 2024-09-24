@@ -1,6 +1,5 @@
 package com.example.blockchaincom.data.remote.releases
 
-import com.example.blockchaincom.data.Urls
 import com.google.gson.annotations.SerializedName
 
 data class Pagination(

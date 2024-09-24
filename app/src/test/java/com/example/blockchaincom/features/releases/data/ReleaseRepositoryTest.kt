@@ -1,7 +1,7 @@
 package com.example.blockchaincom.features.releases.data
 
 import android.content.Context
-import com.example.blockchaincom.data.Urls
+import com.example.blockchaincom.data.remote.releases.Urls
 import com.example.blockchaincom.R
 import com.example.blockchaincom.data.local.releases.Release
 import com.example.blockchaincom.data.local.releases.ReleaseDao
