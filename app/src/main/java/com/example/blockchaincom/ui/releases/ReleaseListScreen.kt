@@ -22,6 +22,7 @@ fun ReleaseListScreen(viewModel: ReleaseViewModel = hiltViewModel()) {
         is ReleaseUiState.Loading -> {
             CircularProgressIndicator() // Show a loading indicator
         }
+
         is ReleaseUiState.Error -> {
             AlertDialog(
                 onDismissRequest = { viewModel.clearError() },
@@ -34,6 +35,7 @@ fun ReleaseListScreen(viewModel: ReleaseViewModel = hiltViewModel()) {
                 }
             )
         }
+
         is ReleaseUiState.Success -> {}
     }
     ReleaseList(releases = uiState.releases)

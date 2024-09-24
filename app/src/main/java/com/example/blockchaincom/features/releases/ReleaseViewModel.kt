@@ -69,6 +69,7 @@ class ReleaseViewModel @Inject constructor(
                 is ReleaseResult.Success -> {
                     _uiState.value = ReleaseUiState.Success(result.releases)
                 }
+
                 is ReleaseResult.Error -> {
                     _errorEvents.emit(result.message)
                     _uiState.value = ReleaseUiState.Error(result.releases, result.message)

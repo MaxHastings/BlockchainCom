@@ -55,6 +55,7 @@ class ReleaseRepository @Inject constructor(
                     // Return success with the list of releases
                     return ReleaseResult.Success(releases)
                 }
+
                 is ApiResult.Error -> {
                     // Return error with message and empty list of releases
                     return ReleaseResult.Error(response.message, emptyList())
