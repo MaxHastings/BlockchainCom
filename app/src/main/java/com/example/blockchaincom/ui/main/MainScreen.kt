@@ -24,7 +24,7 @@ import com.example.blockchaincom.R
 fun MainScreen(navController: NavHostController) {
     var artistId by rememberSaveable { mutableStateOf("108713") }
     var isValidId by rememberSaveable { mutableStateOf(true) }
-    val maxLength = 10 // Example maximum length for artist ID
+    val maxLength = 9 // Maximum length for artist ID prevent Integer overflow
 
     Column(
         modifier = Modifier.fillMaxSize(),
