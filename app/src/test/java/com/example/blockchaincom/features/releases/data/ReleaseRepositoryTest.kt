@@ -1,6 +1,7 @@
 package com.example.blockchaincom.features.releases.data
 
 import android.content.Context
+import androidx.compose.ui.geometry.isEmpty
 import com.example.blockchaincom.data.Urls
 import com.example.blockchaincom.data.local.releases.Release
 import com.example.blockchaincom.data.local.releases.ReleaseDao
@@ -16,6 +17,7 @@ import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -147,7 +149,25 @@ class ReleaseRepositoryTest {
 
         val result = releaseRepository.getArtistReleases(artistId)
 
-        // Assert that result is an error
+        // Assert that the result is ReleaseResult.Error
         Assert.assertTrue(result is ReleaseResult.Error)
+    }
+
+    @Test
+    fun `getArtistReleases should return Error when ApiResult is Error`() = runTest {
+
+        val errorMessage = "No Artist Found"
+        coEvery { releasesApi.getArtistReleases(any()) } returns ApiResult.Error(errorMessage)
+
+        val result = releaseRepository.getArtistReleases(123)
+
+        // Assert that the result is ReleaseResult.Error
+        Assert.assertTrue(result is ReleaseResult.Error)
+
+        // Assert that the error message is correct
+        Assert.assertEquals(errorMessage, (result as ReleaseResult.Error).message)
+
+        // Assert that the list of releases is empty
+        Assert.assertTrue(result.releases.isEmpty())
     }
 }
