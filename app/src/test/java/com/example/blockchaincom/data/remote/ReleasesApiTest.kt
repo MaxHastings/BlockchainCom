@@ -17,7 +17,6 @@ import okhttp3.ResponseBody
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class ReleasesApiTest {
@@ -91,11 +90,13 @@ class ReleasesApiTest {
 
         val result = releasesApi.getArtistReleases(artistId)
 
-        Assert.assertEquals(2, result.releases.size)
+        Assert.assertTrue(result is ApiResult.Success)
+        val successResult = result as ApiResult.Success
+        Assert.assertEquals(2, successResult.data.releases.size)
     }
 
     @Test
-    fun `getArtistReleases should throw IOException on unsuccessful response`(): Unit = runBlocking {
+    fun `getArtistReleases should throw Exception on unsuccessful response`(): Unit = runBlocking {
         val artistId = 456
         val request = Request.Builder()
             .url("https://api.discogs.com/artists/$artistId/releases")
@@ -109,7 +110,7 @@ class ReleasesApiTest {
 
         coEvery { httpClient.newCall(any()).execute() } returns response
 
-        shouldThrow<IOException> {
+        shouldThrow<Exception> {
             releasesApi.getArtistReleases(artistId)
         }
     }

@@ -3,6 +3,7 @@ package com.example.blockchaincom.features.releases.data
 import android.content.Context
 import com.example.blockchaincom.R
 import com.example.blockchaincom.data.local.releases.ReleaseDao
+import com.example.blockchaincom.data.remote.ApiResult
 import com.example.blockchaincom.data.remote.releases.ReleasesApi
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.firstOrNull
@@ -40,19 +41,25 @@ class ReleaseRepository @Inject constructor(
     suspend fun getArtistReleases(artistId: Int): ReleaseResult {
         try {
             // Fetch artist releases from Discogs API
-            val response = releasesApi.getArtistReleases(artistId)
+            when (val response = releasesApi.getArtistReleases(artistId)) {
+                is ApiResult.Success -> {
+                    // Map the API models to the domain models
+                    val releases = releaseMapper.mapApiModelsToModels(
+                        artistId = artistId,
+                        apiModels = response.data.releases
+                    )
 
-            // Map the API models to the domain models
-            val releases = releaseMapper.mapApiModelsToModels(
-                artistId = artistId,
-                apiModels = response.releases
-            )
+                    // Insert the releases into the local database
+                    releaseDao.insertReleases(releases)
 
-            // Insert the releases into the local database
-            releaseDao.insertReleases(releases)
-
-            // Return success with the list of releases
-            return ReleaseResult.Success(releases)
+                    // Return success with the list of releases
+                    return ReleaseResult.Success(releases)
+                }
+                is ApiResult.Error -> {
+                    // Return error with message and empty list of releases
+                    return ReleaseResult.Error(response.message, emptyList())
+                }
+            }
         } catch (e: Exception) {
             // Fetch cached releases from the local database
             val releases = releaseDao.getReleasesByArtistId(artistId).firstOrNull() ?: emptyList()

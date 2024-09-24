@@ -17,11 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.blockchaincom.R
 
 @Composable
-fun MainScreen(navController: androidx.navigation.NavHostController) {
+fun MainScreen(navController: NavHostController) {
     var artistId by rememberSaveable { mutableStateOf("108713") }
+    var isValidId by rememberSaveable { mutableStateOf(true) }
+    val maxLength = 10 // Example maximum length for artist ID
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -30,13 +33,24 @@ fun MainScreen(navController: androidx.navigation.NavHostController) {
     ) {
         OutlinedTextField(
             value = artistId,
-            onValueChange = { artistId = it },
-            label = { Text(stringResource(R.string.enter_artist_id)) }
+            onValueChange = {
+                artistId = it.filter { it.isDigit() }.take(maxLength) // Only allow digits
+                isValidId = artistId.isNotEmpty()
+            },
+            label = { Text(stringResource(R.string.enter_artist_id)) },
+            isError = !isValidId,
+            supportingText = {
+                if (!isValidId) {
+                    Text("Please enter a valid artist ID (only numbers)")
+                }
+            }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            navController.navigate("release_list/${artistId.toInt()}")
-        }) {
+            if (isValidId) {
+                navController.navigate("release_list/${artistId}")
+            }
+        }, enabled = isValidId) { // Disable button if ID is invalid
             Text(stringResource(R.string.view_releases))
         }
     }

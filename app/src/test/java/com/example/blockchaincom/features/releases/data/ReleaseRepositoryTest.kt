@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.blockchaincom.data.Urls
 import com.example.blockchaincom.data.local.releases.Release
 import com.example.blockchaincom.data.local.releases.ReleaseDao
+import com.example.blockchaincom.data.remote.ApiResult
 import com.example.blockchaincom.data.remote.releases.Pagination
 import com.example.blockchaincom.data.remote.releases.PaginationResponse
 import com.example.blockchaincom.data.remote.releases.ReleaseApiModel
@@ -122,7 +123,7 @@ class ReleaseRepositoryTest {
                 )
             )
         )
-        coEvery { releasesApi.getArtistReleases(artistId) } returns apiReleases
+        coEvery { releasesApi.getArtistReleases(artistId) } returns ApiResult.Success(apiReleases)
         coEvery { releasesMapper.mapApiModelsToModels(apiReleases.releases, artistId) } returns releases
         coEvery { context.getString(any()) } returns "Error fetching releases"
         coEvery { releasesDao.insertReleases(releases) } just Runs
